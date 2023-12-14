@@ -1,0 +1,7 @@
+/node_modules
+.editorconfig.txt
+.prettierrc.json
+.stylelintrc.json
+.postcss.config.js
+.babel.config.js
+.webpack.config.js
