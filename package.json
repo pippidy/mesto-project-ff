@@ -7,7 +7,7 @@
     "test": "echo 'Hello!'",
     "lint": "stylelint \"./src/**/*.css\"",
     "lintfix": "stylelint \"./src/**/*.css\" --fix",
-    "build": "webpack --mode production",
+    "build": "webpack --mode development",
     "dev": "webpack serve"
   },
   "author": "Andrey Koshelev",

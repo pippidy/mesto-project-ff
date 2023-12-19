@@ -1,4 +1,5 @@
 /node_modules
+/public
 .editorconfig.txt
 .prettierrc.json
 .stylelintrc.json
