@@ -13,9 +13,9 @@ export function closeModal(popup) {
 }
 
 function escapeButtonHandler(evt) {
-    if (typeof evt.key === 'string') { // Без этой проверки багует, когда выбираешь предлагаемое браузером значение в выпадающем списке для инпутов. Ругается на toLowercase()
+    if (typeof evt.key === 'string') {
         if (evt.key.toLowerCase() === 'escape') {
-            const popup = document.querySelector('.popup_is-opened');
+            const popup = getOpenedPopup();
             closeModal(popup);
         }
     }

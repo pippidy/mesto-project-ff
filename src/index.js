@@ -34,7 +34,7 @@ const popupOpenImage = document.querySelector('#popup_open-image');
 const popupImageElem = popupOpenImage.querySelector('.popup__image');
 const popupImageCaption = popupOpenImage.querySelector('.popup__caption');
 
-export function addCard(evt) {
+export function addCard() {
     const cardData = {};
 
     cardData.name = inputAddCardName.value;
