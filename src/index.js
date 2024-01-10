@@ -3,7 +3,7 @@ import { renderCard, deleteCard, likeCard } from './components/cards/cards.js';
 import { closeModal, openModal, getOpenedPopup } from './components/modal/modal.js';
 import { editProfilePopup, submitProfileEdit, editAvatar } from './components/profile/profile.js';
 import { enableValidation, clearValidation, toggleSubmitButtonState } from './components/validation/validation.js';
-import { getInitialCards, getUserInfo, postNewCard } from './components/api/api.js';
+import { getInitialCardsRequest, getUserInfoRequset, postNewCardRequest } from './components/api/api.js';
 
 const validationConfig = {
     formSelector: '.popup__form',
@@ -47,22 +47,11 @@ const inputAvatarURL = formEditAvatar.querySelector('.js_input-avatar-url');
 const buttonEditAvatar = document.querySelector('.js_button-avatar-edit');
 export const avatarProfileElement = document.querySelector('.js_profile-image');
 
-export function handleFetchResults(res) {
-    if (res.ok) {
-        return res.json();
-    } else {
-        return Promise.reject(`Ошибка: ${res.status}`);
-    }
-}
-
 export function addCard(form) {
     const cardData = {};
     const loading = renderSubmitLoading(true, form); // Changes button text and stores it for later use
 
-    postNewCard(inputAddCardName.value, inputAddCardUrl.value)
-        .then((res) => {
-            return handleFetchResults(res);
-        })
+    postNewCardRequest(inputAddCardName.value, inputAddCardUrl.value)
         .then((card) => {
             cardData.cardId = card._id;
             cardData.ownerId = card.owner._id;
@@ -98,10 +87,7 @@ export function renderSubmitLoading(isLoading, form, prevText) {
 }
 
 export function renderProfileInfo() {
-    getUserInfo()
-        .then((res) => {
-            return handleFetchResults(res);
-        })
+    getUserInfoRequset()
         .then((data) => {
             formEditProfileName.textContent = data.name;
             formEditProfileDesc.textContent = data.about;
@@ -111,10 +97,7 @@ export function renderProfileInfo() {
 }
 
 export function renderAllCards() {
-    getInitialCards()
-        .then((res) => {
-            return handleFetchResults(res);
-        })
+    getInitialCardsRequest()
         .then((cards) => {
             cards.forEach(function (card) {
                 container.append(renderCard({

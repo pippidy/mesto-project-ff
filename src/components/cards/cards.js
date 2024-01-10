@@ -1,6 +1,6 @@
 import { popupRemoveCard, formRemoveCard, renderSubmitLoading, handleFetchResults } from '../../index.js';
 import { closeModal } from '../modal/modal.js';
-import { getUserInfo, putCardLike, deleteCardLike, deleteCardRequest } from '../api/api.js';
+import { getUserInfoRequset, putCardLikeRequest, deleteCardLikeRequest, deleteCardRequest } from '../api/api.js';
 
 export function renderCard(cardData, openModal, openImage, likeCard) {
   const cardTemplate = document.querySelector('#card-template').content;
@@ -12,10 +12,7 @@ export function renderCard(cardData, openModal, openImage, likeCard) {
   const likesCountElement = card.querySelector('.card__like-count');
   const likesCount = cardData.likes.length;
 
-  getUserInfo()
-    .then((res) => {
-      return handleFetchResults(res);
-    })
+  getUserInfoRequset()
     .then((user) => {
 
       // Setting up remove button
@@ -60,19 +57,14 @@ export function removeCardFromDOM(cardId) {
 
 export function likeCard(likeButton, cardId, likesCountElement) {
   if (likeButton.classList.contains('card__like-button_is-active')) {
-    deleteCardLike(cardId)
-      .then((res) => {
-        return handleFetchResults(res);
-      }).then((data) => {
+    deleteCardLikeRequest(cardId)
+      .then((data) => {
         likesCountElement.textContent = data.likes.length;
         likeButton.classList.remove('card__like-button_is-active');
       })
       .catch(err => console.log(err));
   } else {
-    putCardLike(cardId)
-      .then((res) => {
-        return handleFetchResults(res);
-      })
+    putCardLikeRequest(cardId)
       .then((data) => {
         likesCountElement.textContent = data.likes.length;
         likeButton.classList.add('card__like-button_is-active');
@@ -85,9 +77,6 @@ export function deleteCard(cardID, form) {
   const loading = renderSubmitLoading(true, form); // Changes button text and stores it for later use
 
   deleteCardRequest(cardID)
-    .then((res) => {
-      return handleFetchResults(res);
-    })
     .then(() => {
       removeCardFromDOM(cardID);
       closeModal(popupRemoveCard);

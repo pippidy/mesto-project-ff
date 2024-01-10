@@ -1,5 +1,5 @@
 import { popupEditAvatar, popupEditProfile, formEditProfile, formEditProfileName, formEditProfileDesc, avatarProfileElement, renderSubmitLoading, handleFetchResults } from '../../index.js';
-import { postUserInfo, patchAvatar } from '../api/api.js';
+import { postUserInfoRequest, patchAvatarRequest } from '../api/api.js';
 import { closeModal } from '../modal/modal.js';
 
 export function editProfilePopup() {
@@ -12,10 +12,7 @@ export function submitProfileEdit(nameElement, descElement, form) {
     const desc = formEditProfile.querySelector('input[name="description"]').value;
     const loading = renderSubmitLoading(true, form); // Changes button text and stores it for later use
 
-    postUserInfo(name, desc)
-        .then((res) => {
-            return handleFetchResults(res);
-        })
+    postUserInfoRequest(name, desc)
         .then((data) => {
             nameElement.textContent = data.name;
             descElement.textContent = data.about;
@@ -27,10 +24,8 @@ export function submitProfileEdit(nameElement, descElement, form) {
 export function editAvatar(avatarURL, form) {
     const loading = renderSubmitLoading(true, form); // Changes button text and stores it for later use
 
-    patchAvatar(avatarURL)
-        .then((res) => {
-            return handleFetchResults(res);
-        }).then((data) => {
+    patchAvatarRequest(avatarURL)
+        .then((data) => {
             avatarProfileElement.setAttribute('style', 'background-image: url(' + data.avatar + ');');
             closeModal(popupEditAvatar);
         })
