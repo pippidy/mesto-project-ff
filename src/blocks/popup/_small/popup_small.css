@@ -1,0 +1,7 @@
+.popup_small .popup__content {
+    min-height: auto;
+}
+
+.popup_small .popup__button {
+    margin-top: 0;
+}
