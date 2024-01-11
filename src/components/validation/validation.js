@@ -9,6 +9,22 @@ export function enableValidation(validationConfig) {
     });
 }
 
+export function clearValidation(formElement, validationConfig) {
+    const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
+    const errorList = Array.from(formElement.querySelectorAll(validationConfig.errorClass));
+
+    errorList.forEach((errElement) => {
+        errElement.textContent = '';
+    });
+
+    inputList.forEach((inputElement) => {
+        inputElement.classList.remove(validationConfig.inputErrorClass);
+        inputElement.setCustomValidity(''); // Без этого багует кнопка submit при повторном открытии попапа(в некоторых случаях)
+    });
+
+    toggleSubmitButtonState(formElement, validationConfig);
+}
+
 function setEventHandlers(formElement, inputElement, validationConfig) {
     inputElement.addEventListener('input', () => {
         validateInput(formElement, inputElement, validationConfig);
@@ -50,8 +66,10 @@ export function toggleSubmitButtonState(formElement, validationConfig) {
 
     if (hasInvalidInput(formElement, validationConfig)) {
         buttonElement.classList.add(validationConfig.inactiveButtonClass);
+        buttonElement.disabled = true;
     } else {
         buttonElement.classList.remove(validationConfig.inactiveButtonClass);
+        buttonElement.disabled = false;
     }
 }
 
@@ -61,20 +79,4 @@ function hasInvalidInput(formElement, validationConfig) {
     return inputList.some((inputElement) => {
         return !inputElement.validity.valid;
     });
-}
-
-export function clearValidation(formElement, validationConfig) {
-    const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
-    const errorList = Array.from(formElement.querySelectorAll(validationConfig.errorClass));
-
-    errorList.forEach((errElement) => {
-        errElement.textContent = '';
-    });
-
-    inputList.forEach((inputElement) => {
-        inputElement.classList.remove(validationConfig.inputErrorClass);
-        inputElement.setCustomValidity(''); // Без этого багует кнопка submit при повторном открытии попапа(в некоторых случаях)
-    });
-
-    toggleSubmitButtonState(formElement, validationConfig);
 }

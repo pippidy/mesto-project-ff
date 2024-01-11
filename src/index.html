@@ -43,20 +43,20 @@
         <button type="button" class="popup__close js_popup-close"></button>
         <h3 class="popup__title">Редактировать профиль</h3>
         <form class="popup__form" name="edit-profile" novalidate>
-          <label for="name" class="popup__field">
+          <div class="popup__field">
             <input type="text" name="name" class="popup__input popup__input_type_name" placeholder="Имя" minlength="2"
               maxlength="40" pattern="^[a-zA-Zа-яА-ЯёЁ\s\-]+$"
               data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы." required
               data-id="edit-name">
             <span id="edit-name_error" class="popup__error"></span>
-          </label>
-          <label for="description" class="popup__field">
+          </div>
+          <div class="popup__field">
             <input type="text" name="description" class="popup__input popup__input_type_description"
               placeholder="Занятие" minlength="2" maxlength="200" pattern="^[a-zA-Zа-яА-ЯёЁ\s\-]+$"
               data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы." required
               data-id="edit-desc">
             <span id="edit-desc_error" class="popup__error"></span>
-          </label>
+          </div>
           <button id="edit-name_submit" type="submit" class="button popup__button">Сохранить</button>
         </form>
       </div>
@@ -66,18 +66,18 @@
         <button type="button" class="popup__close js_popup-close"></button>
         <h3 class="popup__title">Новое место</h3>
         <form class="popup__form" name="new-place" novalidate>
-          <label for="place-name" class="popup__field">
+          <div class="popup__field">
             <input type="text" name="place-name" class="popup__input popup__input_type_card-name" placeholder="Название"
               minlength="2" maxlength="30" pattern="^[a-zA-Zа-яА-ЯёЁ\s\-]+$"
               data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы." required
               data-id="place-name">
             <span id="place-name_error" class="popup__error"></span>
-          </label>
-          <label for="link" class="popup__field">
+          </div>
+          <div class="popup__field">
             <input type="url" name="link" class="popup__input popup__input_type_url" placeholder="Ссылка на картинку"
               required data-id="place-link">
             <span id="place-link_error" class="popup__error"></span>
-          </label>
+          </div>
           <button id="place-link_submit" type="submit" class="button popup__button">Сохранить</button>
         </form>
       </div>
@@ -103,11 +103,11 @@
         <button type="button" class="popup__close js_popup-close"></button>
         <h3 class="popup__title">Обновить аватар</h3>
         <form class="popup__form" name="edit-avatar" novalidate>
-          <label for="edit-avatar" class="popup__field">
+          <div class="popup__field">
             <input type="url" name="edit-avatar" placeholder="Введите URL картинки"
               class="popup__input popup__input_type_url js_input-avatar-url" required data-id="edit-avatar">
             <span id="edit-avatar_error" class="popup__error"></span>
-          </label>
+          </div>
           <button id="edit-avatar_submit" type="submit" class="button popup__button">Сохранить</button>
         </form>
       </div>
@@ -120,10 +120,10 @@
       <button type="button" class="card__delete-button"></button>
       <div class="card__description">
         <h2 class="card__title"></h2>
-        <label class="card__button-label">
+        <div class="card__button-label">
           <button type="button" class="card__like-button"></button>
           <span class="card__like-count">6</span>
-        </label>
+        </div>
       </div>
     </li>
   </template>

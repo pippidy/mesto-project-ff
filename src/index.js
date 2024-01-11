@@ -1,190 +1,80 @@
 import './index.css';
-import { renderCard, deleteCard, likeCard } from './components/cards/cards.js';
-import { closeModal, openModal, getOpenedPopup } from './components/modal/modal.js';
-import { editProfilePopup, submitProfileEdit, editAvatar } from './components/profile/profile.js';
-import { enableValidation, clearValidation, toggleSubmitButtonState } from './components/validation/validation.js';
-import { getInitialCardsRequest, getUserInfoRequset, postNewCardRequest } from './components/api/api.js';
+import * as GLOBALS from './globals.js';
+import * as CARDS from './components/cards/cards.js';
+import * as MODAL from './components/modal/modal.js';
+import * as PROFILE from './components/profile/profile.js';
+import * as VALID from './components/validation/validation.js';
 
-const validationConfig = {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inactiveButtonClass: 'popup__button_disabled',
-    inputErrorClass: '.popup__input_type_error',
-    errorClass: '.popup__error'
-}
-
-export const container = document.querySelector('.places__list'); // Main container for cards
-
-const popups = document.querySelectorAll('.popup');
-const inputList = document.querySelectorAll('input');
-const popupCloseButtons = document.querySelectorAll('.js_popup-close');
-
-export const popupEditProfile = document.querySelector('#popup_edit-profile');
-const buttonEditProfile = document.querySelector('.profile__edit-button');
-
-export const formEditProfile = document.querySelector('form[name="edit-profile"]');
-export const formEditProfileName = document.querySelector('.profile__title');
-export const formEditProfileDesc = document.querySelector('.profile__description');
-
-export const popupRemoveCard = document.querySelector('#popup_remove-card');
-export const formRemoveCard = document.querySelector('form[name="remove-card"]');
-
-const popupAddCard = document.querySelector('#popup_add-place');
-const buttonAddCard = document.querySelector('.js_button-card-add');
-
-const formAddCard = document.querySelector('form[name="new-place"]');
-const inputAddCardName = formAddCard.querySelector('input[name="place-name"]');
-const inputAddCardUrl = formAddCard.querySelector('input[name="link"]');
-
-const popupOpenImage = document.querySelector('#popup_open-image');
-const popupImageElem = popupOpenImage.querySelector('.js_popup-image');
-const popupImageCaption = popupOpenImage.querySelector('.js_popup-caption');
-
-export const popupEditAvatar = document.querySelector('#popup_edit-avatar');
-const formEditAvatar = document.querySelector('form[name="edit-avatar"]');
-const inputAvatarURL = formEditAvatar.querySelector('.js_input-avatar-url');
-const buttonEditAvatar = document.querySelector('.js_button-avatar-edit');
-export const avatarProfileElement = document.querySelector('.js_profile-image');
-
-export function addCard(form) {
-    const cardData = {};
-    const loading = renderSubmitLoading(true, form); // Changes button text and stores it for later use
-
-    postNewCardRequest(inputAddCardName.value, inputAddCardUrl.value)
-        .then((card) => {
-            cardData.cardId = card._id;
-            cardData.ownerId = card.owner._id;
-            cardData.name = card.name;
-            cardData.url = card.link;
-            cardData.likes = card.likes;
-
-            container.prepend(renderCard(cardData, openModal, openImage));
-        })
-        .catch(err => console.log(err))
-        .finally(() => renderSubmitLoading(false, form, loading));
-}
-
-export function openImage(cardData, openModal) {
-    popupImageElem.src = cardData.url;
-    popupImageElem.alt = 'test alt';
-    popupImageCaption.textContent = cardData.name;
-
-    openModal(popupOpenImage);
-}
-
-export function renderSubmitLoading(isLoading, form, prevText) {
-    const button = form.querySelector('button[type="submit"]');
-
-    if (isLoading) {
-        prevText = button.textContent;
-        button.textContent = 'Сохранение...';
-
-        return prevText;
-    } else {
-        button.textContent = prevText;
-    }
-}
-
-export function renderProfileInfo() {
-    getUserInfoRequset()
-        .then((data) => {
-            formEditProfileName.textContent = data.name;
-            formEditProfileDesc.textContent = data.about;
-            avatarProfileElement.setAttribute('style', 'background-image: url(' + data.avatar + ');');
-        })
-        .catch(err => console.log(err));
-}
-
-export function renderAllCards() {
-    getInitialCardsRequest()
-        .then((cards) => {
-            cards.forEach(function (card) {
-                container.append(renderCard({
-                    cardId: card._id,
-                    ownerId: card.owner._id,
-                    name: card.name,
-                    url: card.link,
-                    likes: card.likes
-                }, openModal, openImage, likeCard));
-            });
-        })
-        .catch(err => console.log(err));
-}
-
-renderProfileInfo();
-renderAllCards();
+GLOBALS.renderProfileInfo();
+GLOBALS.renderAllCards();
+VALID.enableValidation(GLOBALS.validationConfig);
 
 ////////////////////////////////////////
 /////////// EVENT LISTENERS ///////////
 //////////////////////////////////////
 
-buttonEditProfile.addEventListener('click', () => {
-    editProfilePopup();
-    clearValidation(formEditProfile, validationConfig);
-    openModal(popupEditProfile);
+GLOBALS.buttonEditProfile.addEventListener('click', () => {
+    PROFILE.editProfilePopup();
+    VALID.clearValidation(GLOBALS.formEditProfile, GLOBALS.validationConfig);
+    MODAL.openModal(GLOBALS.popupEditProfile);
 });
 
-buttonAddCard.addEventListener('click', () => {
-    openModal(popupAddCard);
+GLOBALS.buttonAddCard.addEventListener('click', () => {
+    MODAL.openModal(GLOBALS.popupAddCard);
 });
 
-buttonEditAvatar.addEventListener('click', () => {
-    openModal(popupEditAvatar);
+GLOBALS.buttonEditAvatar.addEventListener('click', () => {
+    MODAL.openModal(GLOBALS.popupEditAvatar);
 });
 
-formEditProfile.addEventListener('submit', (evt) => {
+GLOBALS.formEditProfile.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
-    submitProfileEdit(formEditProfileName, formEditProfileDesc, formEditProfile);
-    closeModal(popupEditProfile);
+    PROFILE.submitProfileEdit(GLOBALS.formEditProfileName, GLOBALS.formEditProfileDesc, GLOBALS.formEditProfile);
 });
 
-formAddCard.addEventListener('submit', (evt) => {
+GLOBALS.formAddCard.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
-    addCard(formAddCard);
-    formAddCard.reset();
-    toggleSubmitButtonState(formAddCard, validationConfig);
-    closeModal(popupAddCard);
+    GLOBALS.addCard(GLOBALS.formAddCard);
+    GLOBALS.formAddCard.reset();
+    VALID.toggleSubmitButtonState(GLOBALS.formAddCard, GLOBALS.validationConfig);
 });
 
-formEditAvatar.addEventListener('submit', (evt) => {
+GLOBALS.formEditAvatar.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    const avatarURL = inputAvatarURL.value;
+    const avatarURL = GLOBALS.inputAvatarURL.value;
 
-    editAvatar(avatarURL, formEditAvatar);
+    PROFILE.editAvatar(avatarURL, GLOBALS.formEditAvatar);
 });
 
-formRemoveCard.addEventListener('submit', (evt) => {
+GLOBALS.formRemoveCard.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    const cardID = formRemoveCard.dataset.cardId;
+    const cardID = GLOBALS.formRemoveCard.dataset.cardId;
 
-    deleteCard(cardID, formRemoveCard);
+    CARDS.deleteCard(cardID, GLOBALS.formRemoveCard);
 });
 
-popupCloseButtons.forEach(function (item) {
+GLOBALS.popupCloseButtons.forEach(function (item) {
     item.addEventListener('click', () => {
-        const popup = getOpenedPopup();
-        closeModal(popup);
+        const popup = MODAL.getOpenedPopup();
+        MODAL.closeModal(popup);
     });
 });
 
 // Closing popup on overlay click
-popups.forEach(function (item) {
-    item.addEventListener('click', (evt) => {
-        const popup = getOpenedPopup();
+GLOBALS.popups.forEach(function (item) {
+    item.addEventListener('mousedown', (evt) => {
+        const popup = MODAL.getOpenedPopup();
 
         if (evt.target === popup) {
-            closeModal(popup);
+            MODAL.closeModal(popup);
         }
     });
 });
 
-inputList.forEach(function (input) {
+GLOBALS.inputList.forEach(function (input) {
     input.addEventListener('focus', () => {
         input.select();
     });
 });
-
-enableValidation(validationConfig);
